@@ -24,7 +24,7 @@
 //  }
 
 type Door = {
-    door: 'open' | 'close',
+    door: boolean,
 }
 
 
@@ -37,9 +37,7 @@ class Key {
 }
 
 class Person {
-    constructor(private key: Key) {
-        this.key = key;
-    }
+    constructor(private key: Key) {}
     
     getKey(): Key {
         return this.key;
@@ -49,12 +47,10 @@ class Person {
 abstract class House {
      
     protected tenants: Person[] = [];
+    protected door: boolean = false;
 
-    constructor(protected door: Door, protected key: Key) {
-        this.door = door;
-        this.key = key;
-       
-    }
+    constructor(protected key: Key) { }
+
     comeIn(person: Person): void {
         if (this.door) {
             this.tenants.push(person);
@@ -65,14 +61,11 @@ abstract class House {
   
 class MyHouse extends House {
 
-constructor(door: Door, key: Key) {
-        super(door, key);
-    }
 
     // Реалізація абстрактного методу відкриття дверей
-    openDoor(key: Key) {
+    openDoor(key: Key):void {
         if (key.getSignature() === this.key.getSignature()) {
-            this.door.door = 'open';
+            this.door = true;
         }
     }
 
@@ -81,8 +74,7 @@ constructor(door: Door, key: Key) {
 
 const key = new Key();
 
-const door: Door = { door: 'close' };
-const house = new MyHouse(door, key);
+const house = new MyHouse(key);
 
 const person = new Person(key);
 
